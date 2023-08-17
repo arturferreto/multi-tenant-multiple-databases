@@ -18,9 +18,9 @@ class TenantFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->company(),
-            'slug' => fake()->slug(),
-            'database' => Str::of(fake()->slug())->replaceMatches('/[-_]/', ''),
+            'name' => $company = fake()->company(),
+            'slug' => Str::slug($company),
+            'database' => Str::replace('-', '_', Str::slug($company)),
             'total_users' => fake()->numberBetween(1, 10),
         ];
     }
