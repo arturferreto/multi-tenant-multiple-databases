@@ -20,14 +20,7 @@ class HandleTenantConfiguration
         $user = $request->user();
 
         if ($user->current_tenant_id === null) {
-            // TODO: Redirecionar para a página de seleção de tenant
-            Auth::logout();
-
-            $request->session()->invalidate();
-
-            $request->session()->regenerateToken();
-
-            return redirect()->route('login');
+            return redirect()->route('change-tenant.show');
         }
 
         $user->currentTenant->configure()->use();
