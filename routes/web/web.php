@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\ChangeTenantController;
 use App\Http\Controllers\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
 use App\Http\Controllers\Auth\EmailVerificationPromptController;
@@ -62,6 +63,12 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
+    Route::get('company/change', [ChangeTenantController::class, 'show'])
+        ->name('change-tenant.show');
+
+    Route::post('company/change', [ChangeTenantController::class, 'store'])
+        ->name('change-tenant.store');
+
     Route::get('verify-email', EmailVerificationPromptController::class)
         ->name('verification.notice');
 
@@ -84,12 +91,7 @@ Route::middleware('auth')->group(function () {
         ->name('logout');
 });
 
-Route::fallback(function () {
-    if (request()->is('api/*')) {
-        return response()->json([
-            'message' => 'Rota não encontrada, verifique a documentação da API.',
-        ], 404);
-    }
-
-    return Inertia::render('NotFound');
-});
+Route::fallback(fn () => request()->is('api/*')
+    ? response()->json(['message' => 'Rota não encontrada, verifique a documentação da API.'], 404)
+    : Inertia::render('NotFound')
+);
