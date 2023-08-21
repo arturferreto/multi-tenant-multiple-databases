@@ -77,4 +77,16 @@ class User extends Authenticatable
     {
         return $this->HasOne(UserSetting::class);
     }
+
+    /**
+     * Update the user's current tenant.
+     */
+    public function updateCurrentTenant(?int $id = null): void
+    {
+        $this->current_tenant_id = $id;
+        $this->save();
+
+        // This is required to ensure the relationship is updated when the user is retrieved again.
+        $this->refresh();
+    }
 }

@@ -6,10 +6,11 @@ use App\Models\Traits\MultiTenancy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Tenant extends Model
 {
-    use HasFactory, MultiTenancy;
+    use HasFactory, SoftDeletes, MultiTenancy;
 
     /**
      * The connection name for the model.

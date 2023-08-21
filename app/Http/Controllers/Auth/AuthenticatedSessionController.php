@@ -42,9 +42,7 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
-        $request->user()->current_tenant_id = null;
-
-        $request->user()->save();
+        $request->user()->updateCurrentTenant();
 
         Auth::guard('web')->logout();
 

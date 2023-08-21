@@ -28,8 +28,7 @@ class ChangeTenantController extends Controller
     {
         $user = $request->user();
 
-        $user->current_tenant_id = $request->tenant_id;
-        $user->save();
+        $user->updateCurrentTenant($request->tenant_id);
 
         if ($request->fav_tenant_id === true) {
             $user->setting->fav_tenant_id = $request->tenant_id;

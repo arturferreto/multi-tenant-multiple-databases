@@ -20,15 +20,10 @@ class ResolveCurrentTenant
      */
     public function handle(object $event): void
     {
-        $user = $event->user;
-        $setting = $user->setting;
-        $tenants = $user->tenants;
+        $tenant = $event->user->setting->fav_tenant_id !== null
+            ? $event->user->setting->fav_tenant_id
+            : ($event->user->tenants->count() === 1 ? $event->user->tenants->first()->id : null);
 
-        $tenant = $setting->fav_tenant_id !== null
-            ? $setting->fav_tenant_id
-            : ($tenants->count() === 1 ? $tenants->first()->id : null);
-
-        $user->update(['current_tenant_id' => $tenant]);
-        $user->save();
+        $event->user->updateCurrentTenant($tenant);
     }
 }

@@ -4,7 +4,6 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -17,13 +16,11 @@ class HandleTenantConfiguration
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $user = $request->user();
-
-        if ($user->current_tenant_id === null) {
+        if ($request->user()->current_tenant_id === null) {
             return redirect()->route('change-tenant.show');
         }
 
-        $user->currentTenant->configure()->use();
+        $request->user()->currentTenant->configure()->use();
 
         URL::defaults(['tenant' => app('tenant')->slug]);
 
