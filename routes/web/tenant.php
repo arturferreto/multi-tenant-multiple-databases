@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Models\Company;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -16,7 +17,9 @@ use Inertia\Inertia;
 */
 
 Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
+    return Inertia::render('Dashboard', [
+        'company' => Company::all()->first(),
+    ]);
 })->name('dashboard');
 
 Route::controller(ProfileController::class)->prefix('/profile')->name('profile.')->group(function () {

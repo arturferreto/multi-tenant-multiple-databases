@@ -71,26 +71,26 @@ const submit = () => {
                 <span class="ml-3 flex flex-col">
                   <span
                     :id="'change-company-' + tenant.id + '-label'"
-                    :class="[form.tenant_id === tenant.id ? 'text-indigo-900 dark:text-indigo-500' : 'text-gray-900 dark:text-gray-200', 'block text-sm font-medium']"
+                    :class="[form.tenant_id === tenant.id ? 'text-indigo-900 dark:text-indigo-500' : 'text-gray-900 dark:text-gray-200', 'block text-sm font-medium flex items-center gap-x-4']"
                   >
                     <span>{{ tenant.name }}</span>
 
-                    <Badge v-if="current_tenant_id === tenant.id" type="small" color="sky" class="ml-1 inline-block"> Current </Badge>
+                    <Badge v-if="fav_tenant_id === tenant.id" type="small" color="yellow" class="inline-block">
+                      Favorite
+                    </Badge>
 
-                    <Badge v-if="fav_tenant_id === tenant.id" type="small" color="yellow" class="ml-1 inline-block"> Favorite </Badge>
+                    <Badge v-if="current_tenant_id === tenant.id" type="small" color="sky" class="inline-block">
+                      Current
+                    </Badge>
                   </span>
 
                   <span
                     :id="'change-company-' + tenant.id + '-description'"
                     :class="[form.tenant_id === tenant.id ? 'text-indigo-700 dark:text-indigo-400' : 'text-gray-500', 'block text-sm mt-1']"
                   >
-                    <Badge v-if="tenant.deleted_at !== null" type="small" color="red" class="inline-block">
+                    <span v-if="tenant.deleted_at !== null" class="text-red-600 dark:text-red-400">
                       {{ 'Deactivated on ' + new Date(tenant.deleted_at).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' }) }}
-                    </Badge>
-
-                    <Badge v-else type="small" color="green" class="inline-block">
-                      {{ 'Active' }}
-                    </Badge>
+                    </span>
                   </span>
                 </span>
               </label>
