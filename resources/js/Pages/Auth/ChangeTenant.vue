@@ -3,10 +3,22 @@ import GuestLayout from '@/Layouts/GuestLayout.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import {Head, Link, useForm} from '@inertiajs/vue3';
 import Checkbox from "@/Components/Checkbox.vue";
+import Badge from "@/Components/Badge.vue";
+import InputError from "@/Components/InputError.vue";
 
 defineProps({
   tenants: {
     type: Object,
+    required: true,
+  },
+
+  current_tenant_id: {
+    type: [Number, null],
+    required: true,
+  },
+
+  fav_tenant_id: {
+    type: [Number, null],
     required: true,
   },
 });
@@ -41,10 +53,12 @@ const submit = () => {
               <label
                 v-for="tenant in tenants" :key="tenant.id"
                 :class="[
+                  tenant.deleted_at !== null ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer',
                   form.tenant_id === tenant.id ? 'z-10 border-indigo-200 dark:border-indigo-800 bg-indigo-50 dark:bg-indigo-950/50' : 'border-gray-200 dark:border-gray-600',
                   'first:rounded-t-md last:rounded-b-md relative flex cursor-pointer border p-4 focus:outline-none']"
               >
                 <input
+                  :disabled="tenant.deleted_at !== null"
                   type="radio"
                   name="change-company"
                   v-model="form.tenant_id"
@@ -59,25 +73,39 @@ const submit = () => {
                     :id="'change-company-' + tenant.id + '-label'"
                     :class="[form.tenant_id === tenant.id ? 'text-indigo-900 dark:text-indigo-500' : 'text-gray-900 dark:text-gray-200', 'block text-sm font-medium']"
                   >
-                    {{ tenant.name }}
+                    <span>{{ tenant.name }}</span>
+
+                    <Badge v-if="current_tenant_id === tenant.id" type="small" color="sky" class="ml-1 inline-block"> Current </Badge>
+
+                    <Badge v-if="fav_tenant_id === tenant.id" type="small" color="yellow" class="ml-1 inline-block"> Favorite </Badge>
                   </span>
 
                   <span
                     :id="'change-company-' + tenant.id + '-description'"
-                    :class="[form.tenant_id === tenant.id ? 'text-indigo-700 dark:text-indigo-400' : 'text-gray-500', 'block text-sm']"
+                    :class="[form.tenant_id === tenant.id ? 'text-indigo-700 dark:text-indigo-400' : 'text-gray-500', 'block text-sm mt-1']"
                   >
-                    This project would be available to anyone who has the link
+                    <Badge v-if="tenant.deleted_at !== null" type="small" color="red" class="inline-block">
+                      {{ 'Deactivated on ' + new Date(tenant.deleted_at).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' }) }}
+                    </Badge>
+
+                    <Badge v-else type="small" color="green" class="inline-block">
+                      {{ 'Active' }}
+                    </Badge>
                   </span>
                 </span>
               </label>
             </div>
           </fieldset>
 
+          <InputError class="mt-2" :message="form.errors.tenant_id" />
+
           <div class="block mt-4">
             <label class="flex items-center">
               <Checkbox name="Set as favorite" v-model:checked="form.fav_tenant_id" />
               <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">Set as favorite</span>
             </label>
+
+            <InputError :message="form.errors.fav_tenant_id" />
           </div>
 
           <div class="flex justify-end mt-4">

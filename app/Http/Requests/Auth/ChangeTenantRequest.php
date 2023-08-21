@@ -22,8 +22,19 @@ class ChangeTenantRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'tenant_id' => 'required|int|exists:landlord.tenants,id',
+            'tenant_id' => 'required|int|exists:landlord.tenants,id,deleted_at,NULL',
             'fav_tenant_id' => 'nullable|boolean',
+        ];
+    }
+
+    /**
+     * Get the validation attributes that apply to the request.
+     */
+    public function attributes(): array
+    {
+        return [
+            'tenant_id' => 'tenant',
+            'fav_tenant_id' => 'favorite tenant',
         ];
     }
 }
