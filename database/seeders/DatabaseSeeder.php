@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use App\Models\Company;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -16,9 +15,5 @@ class DatabaseSeeder extends Seeder
     {
         DB::statement('DROP EXTENSION IF EXISTS unaccent');
         DB::statement('CREATE EXTENSION unaccent');
-
-        Company::create([
-            'name' => app('tenant')->name,
-        ]);
     }
 }
