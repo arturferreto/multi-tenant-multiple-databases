@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Auth;
 
+use App\Models\Tenant;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -21,6 +22,10 @@ class AuthenticationTest extends TestCase
     public function test_users_can_authenticate_using_the_login_screen(): void
     {
         $user = User::factory()->create();
+        $user->setting()->create();
+
+        $tenant = Tenant::factory()->create();
+        $tenant->users()->attach($user->id);
 
         $response = $this->post('/login', [
             'email' => $user->email,
@@ -28,6 +33,7 @@ class AuthenticationTest extends TestCase
         ]);
 
         $this->assertAuthenticated();
+
         $response->assertRedirect(RouteServiceProvider::HOME);
     }
 
