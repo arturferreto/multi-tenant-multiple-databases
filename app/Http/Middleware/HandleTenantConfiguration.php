@@ -17,7 +17,7 @@ class HandleTenantConfiguration
     public function handle(Request $request, Closure $next): Response
     {
         if ($request->user()->current_tenant_id === null) {
-            return redirect()->route('change-tenant.show');
+            return redirect()->route('choose-tenant.show');
         }
 
         $request->user()->currentTenant->configure()->use();

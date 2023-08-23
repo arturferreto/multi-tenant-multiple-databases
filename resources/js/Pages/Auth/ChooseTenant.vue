@@ -29,7 +29,7 @@ const form = useForm({
 });
 
 const submit = () => {
-  form.post(route('change-tenant.store'), {
+  form.post(route('choose-tenant.store'), {
       onFinish: () => form.reset(),
   });
 };

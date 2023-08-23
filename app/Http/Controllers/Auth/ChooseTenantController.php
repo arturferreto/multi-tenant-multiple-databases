@@ -3,20 +3,20 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\ChangeTenantRequest;
+use App\Http\Requests\Auth\ChooseTenantRequest;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class ChangeTenantController extends Controller
+class ChooseTenantController extends Controller
 {
     /**
      * Show the change tenant view.
      */
     public function show(): Response
     {
-        return Inertia::render('Auth/ChangeTenant', [
+        return Inertia::render('Auth/ChooseTenant', [
             'tenants' => auth()->user()->tenants()->withTrashed()->get(),
             'current_tenant_id' => auth()->user()->current_tenant_id,
             'fav_tenant_id' => auth()->user()->setting->fav_tenant_id,
@@ -26,7 +26,7 @@ class ChangeTenantController extends Controller
     /**
      * Change the user's current tenant.
      */
-    public function store(ChangeTenantRequest $request): RedirectResponse
+    public function store(ChooseTenantRequest $request): RedirectResponse
     {
         $user = $request->user();
 

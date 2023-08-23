@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\Auth\ChangeTenantController;
+use App\Http\Controllers\Auth\ChooseTenantController;
 use App\Http\Controllers\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
 use App\Http\Controllers\Auth\EmailVerificationPromptController;
@@ -35,7 +35,7 @@ Route::get('/', function () {
 });
 
 Route::get('/home', function () {
-    return Redirect::route('dashboard');
+    return redirect()->route('dashboard');
 })->middleware('authenticated')->name('home');
 
 Route::middleware('guest')->group(function () {
@@ -63,11 +63,11 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('company/change', [ChangeTenantController::class, 'show'])
-        ->name('change-tenant.show');
+    Route::get('company/choose', [ChooseTenantController::class, 'show'])
+        ->name('choose-tenant.show');
 
-    Route::post('company/change', [ChangeTenantController::class, 'store'])
-        ->name('change-tenant.store');
+    Route::post('company/choose', [ChooseTenantController::class, 'store'])
+        ->name('choose-tenant.store');
 
     Route::get('verify-email', EmailVerificationPromptController::class)
         ->name('verification.notice');
