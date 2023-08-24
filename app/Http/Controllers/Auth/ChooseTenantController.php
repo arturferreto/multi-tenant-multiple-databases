@@ -18,7 +18,6 @@ class ChooseTenantController extends Controller
     {
         return Inertia::render('Auth/ChooseTenant', [
             'tenants' => auth()->user()->tenants()->withTrashed()->get(),
-            'current_tenant_id' => auth()->user()->current_tenant_id,
             'fav_tenant_id' => auth()->user()->setting->fav_tenant_id,
         ]);
     }

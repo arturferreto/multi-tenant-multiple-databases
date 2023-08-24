@@ -1,7 +1,7 @@
 <script setup>
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
-import {Head, Link, useForm} from '@inertiajs/vue3';
+import {Head, Link, useForm, usePage} from '@inertiajs/vue3';
 import Checkbox from "@/Components/Checkbox.vue";
 import Badge from "@/Components/Badge.vue";
 import InputError from "@/Components/InputError.vue";
@@ -9,11 +9,6 @@ import InputError from "@/Components/InputError.vue";
 defineProps({
   tenants: {
     type: Object,
-    required: true,
-  },
-
-  current_tenant_id: {
-    type: [Number, null],
     required: true,
   },
 
@@ -33,6 +28,8 @@ const submit = () => {
       onFinish: () => form.reset(),
   });
 };
+
+const user = usePage().props.auth.user;
 </script>
 
 <template>
@@ -79,7 +76,7 @@ const submit = () => {
                       Favorite
                     </Badge>
 
-                    <Badge v-if="current_tenant_id === tenant.id" type="small" color="sky" class="inline-block">
+                    <Badge v-if="user.current_tenant_id === tenant.id" type="small" color="sky" class="inline-block">
                       Current
                     </Badge>
                   </span>
