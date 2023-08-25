@@ -13,7 +13,8 @@ trait MultiTenancy
      */
     public function configure(): self
     {
-        $this->createDatabase();
+        // TODO: Remover criação do banco de dados
+        $this->checkIfTenantDatabaseExists();
 
         config()->set([
             'database.connections.tenant.database' => $this->database,
@@ -42,7 +43,7 @@ trait MultiTenancy
     /**
      * Check if the tenant database exists.
      */
-    public function checkDatabase(): bool
+    public function checkIfTenantDatabaseExists(): bool
     {
         return (bool) DB::select("SELECT 1 FROM pg_database WHERE datname = '$this->database'");
     }
@@ -52,7 +53,7 @@ trait MultiTenancy
      */
     public function createDatabase(): bool
     {
-        if ($this->checkDatabase()) {
+        if ($this->checkIfTenantDatabaseExists()) {
             return false;
         }
 
