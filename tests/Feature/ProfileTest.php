@@ -12,62 +12,64 @@ class ProfileTest extends TestCase
 
     public function test_profile_page_is_displayed(): void
     {
-        $user = User::factory()->create();
+        $user = $this->createUser();
 
         $response = $this
             ->actingAs($user)
-            ->get('/profile');
+            ->get('/'. $user->currentTenant->slug . '/profile');
 
         $response->assertOk();
     }
 
     public function test_profile_information_can_be_updated(): void
     {
-        $user = User::factory()->create();
+        $user = $this->createUser();
 
         $response = $this
             ->actingAs($user)
-            ->patch('/profile', [
+            ->patch('/'. $user->currentTenant->slug . '/profile', [
                 'name' => 'Test User',
+                'username' => 'test.user',
                 'email' => 'test@example.com',
             ]);
 
         $response
             ->assertSessionHasNoErrors()
-            ->assertRedirect('/profile');
+            ->assertRedirect('/'. $user->currentTenant->slug . '/profile');
 
         $user->refresh();
 
         $this->assertSame('Test User', $user->name);
+        $this->assertSame('test.user', $user->username);
         $this->assertSame('test@example.com', $user->email);
         $this->assertNull($user->email_verified_at);
     }
 
     public function test_email_verification_status_is_unchanged_when_the_email_address_is_unchanged(): void
     {
-        $user = User::factory()->create();
+        $user = $this->createUser();
 
         $response = $this
             ->actingAs($user)
-            ->patch('/profile', [
+            ->patch('/'. $user->currentTenant->slug . '/profile', [
                 'name' => 'Test User',
                 'email' => $user->email,
             ]);
 
         $response
             ->assertSessionHasNoErrors()
-            ->assertRedirect('/profile');
+            ->assertRedirect('/'. $user->currentTenant->slug . '/profile');
 
         $this->assertNotNull($user->refresh()->email_verified_at);
     }
 
     public function test_user_can_delete_their_account(): void
     {
-        $user = User::factory()->create();
+        $user = $this->createUser();
 
         $response = $this
             ->actingAs($user)
-            ->delete('/profile', [
+            ->delete('/'. $user->currentTenant->slug . '/profile', [
                 'password' => 'password',
             ]);
 
@@ -81,18 +83,18 @@ class ProfileTest extends TestCase
 
     public function test_correct_password_must_be_provided_to_delete_account(): void
     {
-        $user = User::factory()->create();
+        $user = $this->createUser();
 
         $response = $this
             ->actingAs($user)
-            ->from('/profile')
-            ->delete('/profile', [
+            ->from('/'. $user->currentTenant->slug . '/profile')
+            ->delete('/'. $user->currentTenant->slug . '/profile', [
                 'password' => 'wrong-password',
             ]);
 
         $response
             ->assertSessionHasErrors('password')
-            ->assertRedirect('/profile');
+            ->assertRedirect('/'. $user->currentTenant->slug . '/profile');
 
         $this->assertNotNull($user->fresh());
     }

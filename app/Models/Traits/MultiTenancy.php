@@ -13,9 +13,6 @@ trait MultiTenancy
      */
     public function configure(): self
     {
-        // TODO: Remover criação do banco de dados
-        $this->checkIfTenantDatabaseExists();
-
         config()->set([
             'database.connections.tenant.database' => $this->database,
             'cache.prefix' => $this->database,
