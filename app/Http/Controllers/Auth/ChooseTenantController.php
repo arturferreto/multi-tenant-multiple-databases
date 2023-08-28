@@ -14,8 +14,12 @@ class ChooseTenantController extends Controller
     /**
      * Show the change tenant view.
      */
-    public function show(): Response
+    public function show(): Response|RedirectResponse
     {
+        if (auth()->user()->tenants()->count() === 1) {
+            return redirect()->intended(RouteServiceProvider::HOME);
+        }
+
         return Inertia::render('Auth/ChooseTenant', [
             'tenants' => auth()->user()->tenants()->withTrashed()->get(),
             'fav_tenant_id' => auth()->user()->setting->fav_tenant_id,
