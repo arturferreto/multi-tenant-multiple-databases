@@ -16,7 +16,7 @@ class HandleTenantConfiguration
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if ($request->user()->current_tenant_id === null) {
+        if ($request->user()->current_tenant_id === null || $request->user()->currentTenant->deleted_at !== null) {
             return redirect()->route('choose-tenant.show');
         }
 
