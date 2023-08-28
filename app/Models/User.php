@@ -59,7 +59,7 @@ class User extends Authenticatable
      */
     public function currentTenant(): BelongsTo
     {
-        return $this->belongsTo(Tenant::class, 'current_tenant_id');
+        return $this->belongsTo(Tenant::class, 'current_tenant_id')->withTrashed();
     }
 
     /**
@@ -89,4 +89,5 @@ class User extends Authenticatable
         // This is required to ensure the relationship is updated when the user is retrieved again.
         $this->refresh();
     }
+
 }
