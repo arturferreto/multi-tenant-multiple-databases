@@ -16,7 +16,13 @@ class ChooseTenantController extends Controller
      */
     public function show(): Response|RedirectResponse
     {
-        if (auth()->user()->tenants()->count() === 1) {
+        $user = auth()->user();
+
+        if ($user->tenants()->withTrashed()->count() === 1) {
+            $user->updateCurrentTenant($user->tenants()->first()->id);
+
+            $user->setting->update(['fav_tenant_id' => $user->tenants()->first()->id]);
+
             return redirect()->intended(RouteServiceProvider::HOME);
         }
 
