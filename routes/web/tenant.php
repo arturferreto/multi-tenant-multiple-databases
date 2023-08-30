@@ -17,9 +17,7 @@ use Inertia\Inertia;
 */
 
 Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard', [
-        'company' => Company::all()->first(),
-    ]);
+    return Inertia::render('Dashboard');
 })->name('dashboard');
 
 Route::controller(ProfileController::class)->prefix('/profile')->name('profile.')->group(function () {

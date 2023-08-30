@@ -35,7 +35,7 @@ Route::get('/', function () {
 });
 
 Route::get('/home', function () {
-    return redirect()->route('dashboard');
+    return Redirect::route('dashboard');
 })->middleware('authenticated')->name('home');
 
 Route::middleware('guest')->group(function () {
