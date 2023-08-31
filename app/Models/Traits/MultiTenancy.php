@@ -20,7 +20,7 @@ trait MultiTenancy
 
         DB::purge('tenant');
 
-        app('cache')->forgetDriver(config('cache.default'));
+        app('cache')->purge(config('cache.default'));
 
         return $this;
     }

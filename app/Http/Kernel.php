@@ -51,7 +51,7 @@ class Kernel extends HttpKernel
             'auth',
             'auth.session',
             'verified',
-            \App\Http\Middleware\HandleTenantConfiguration::class,
+            \App\Http\Middleware\HandleTenantSession::class,
         ],
     ];
 
