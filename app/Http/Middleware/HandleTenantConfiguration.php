@@ -22,8 +22,6 @@ class HandleTenantConfiguration
 
         $request->user()->currentTenant->configure()->use();
 
-        URL::defaults(['tenant' => app('tenant')->slug]);
-
         return $next($request);
     }
 }

@@ -34,10 +34,6 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/home', function () {
-    return Redirect::route('dashboard');
-})->middleware('authenticated')->name('home');
-
 Route::middleware('guest')->group(function () {
     Route::get('register', [RegisteredUserController::class, 'create'])
         ->name('register');

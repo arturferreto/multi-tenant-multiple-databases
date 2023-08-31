@@ -17,7 +17,7 @@ use Inertia\Inertia;
 */
 
 Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
+    return Inertia::render('Dashboard', ['tenant' => app('tenant')]);
 })->name('dashboard');
 
 Route::controller(ProfileController::class)->prefix('/profile')->name('profile.')->group(function () {

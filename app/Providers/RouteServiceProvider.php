@@ -17,7 +17,7 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    public const HOME = '/home';
+    public const HOME = '/dashboard';
 
     /**
      * Define your route model bindings, pattern filters, and other route configuration.
@@ -27,10 +27,15 @@ class RouteServiceProvider extends ServiceProvider
         $this->configureRateLimiting();
 
         $this->routes(function () {
-            $this->mapWebRoutes();
-            $this->mapApiRoutes();
+            Route::middleware('web')
+                ->group(base_path('routes/web/web.php'));
 
-            $this->mapWebTenantRoutes();
+            Route::prefix('/api')
+                ->middleware('api')
+                ->group(base_path('routes/api.php'));
+
+            Route::middleware('authenticated')
+                ->group(base_path('routes/web/tenant.php'));
         });
     }
 
@@ -49,34 +54,5 @@ class RouteServiceProvider extends ServiceProvider
                     ], 429, $headers);
                 });
         });
-    }
-
-    /**
-     * Define the "web" routes for the application.
-     */
-    protected function mapWebRoutes(): void
-    {
-        Route::middleware('web')
-            ->group(base_path('routes/web/web.php'));
-    }
-
-    /**
-     * Define the "api" routes for the application.
-     */
-    protected function mapApiRoutes(): void
-    {
-        Route::prefix('/api')
-            ->middleware('api')
-            ->group(base_path('routes/api.php'));
-    }
-
-    /**
-     * Define the "tenant" web routes for the application.
-     */
-    protected function mapWebTenantRoutes(): void
-    {
-        Route::prefix('/{tenant}')
-            ->middleware('authenticated')
-            ->group(base_path('routes/web/tenant.php'));
     }
 }
