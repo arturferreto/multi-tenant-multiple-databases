@@ -65,7 +65,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapApiRoutes(): void
     {
-        Route::prefix('api')
+        Route::prefix('/api')
             ->middleware('api')
             ->group(base_path('routes/api.php'));
     }
@@ -75,8 +75,8 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapWebTenantRoutes(): void
     {
-        Route::middleware('authenticated')
-            ->prefix('{tenant?}')
+        Route::prefix('/{tenant}')
+            ->middleware('authenticated')
             ->group(base_path('routes/web/tenant.php'));
     }
 }
