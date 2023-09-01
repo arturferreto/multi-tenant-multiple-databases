@@ -5,6 +5,7 @@ Implementing multi-tenancy in Laravel applications using multiple databases.
   CREATE DATABASE landlord;
 ```
 
+Comandos:
 ```bash
   sail artisan landlord:migrate --fresh --seed;
   sail artisan tenant:migrate --fresh --seed;
