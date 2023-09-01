@@ -4,10 +4,9 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\URL;
 use Symfony\Component\HttpFoundation\Response;
 
-class HandleTenantConfiguration
+class HandleTenantSession
 {
     /**
      * Handle an incoming request.
@@ -16,11 +15,15 @@ class HandleTenantConfiguration
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if ($request->user()->current_tenant_id === null || $request->user()->currentTenant->deleted_at !== null) {
-            return redirect()->route('choose-tenant.show');
+        if (! $request->session()->has('tenant_id')) {
+            $request->session()->put('tenant_id', app('tenant')->id);
+
+            return $next($request);
         }
 
-        $request->user()->currentTenant->configure()->use();
+        if ($request->session()->get('tenant_id') !== app('tenant')->id) {
+            abort(401);
+        }
 
         return $next($request);
     }

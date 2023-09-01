@@ -8,20 +8,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class UserSetting extends Model
 {
     /**
-     * The connection name for the model.
-     *
-     * @var string
-     */
-    protected $connection = 'landlord';
-
-    /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
     protected $fillable = [
         'user_id',
-        'fav_tenant_id',
     ];
 
     /**
@@ -37,13 +29,5 @@ class UserSetting extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
-    }
-
-    /**
-     * Get the favorite tenant associated with the user.
-     */
-    public function favTenant(): BelongsTo
-    {
-        return $this->belongsTo(Tenant::class, 'fav_tenant_id');
     }
 }

@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use App\Models\Traits\MultiTenancy;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Cache;
 
 class Tenant extends Model
 {
@@ -41,10 +43,12 @@ class Tenant extends Model
     ];
 
     /**
-     * The users that belong to the Tenant
+     * Retrieve all tenants from the cache.
      */
-    public function users(): BelongsToMany
+    public static function allCached(): Collection
     {
-        return $this->belongsToMany(User::class);
+        return Cache::rememberForever('tenants', function () {
+            return Tenant::all('slug', 'database');
+        });
     }
 }

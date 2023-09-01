@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\Auth\ChooseTenantController;
 use App\Http\Controllers\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
 use App\Http\Controllers\Auth\EmailVerificationPromptController;
@@ -59,12 +58,6 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('company/choose', [ChooseTenantController::class, 'show'])
-        ->name('choose-tenant.show');
-
-    Route::post('company/choose', [ChooseTenantController::class, 'store'])
-        ->name('choose-tenant.store');
-
     Route::get('verify-email', EmailVerificationPromptController::class)
         ->name('verification.notice');
 

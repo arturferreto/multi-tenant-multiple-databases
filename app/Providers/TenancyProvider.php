@@ -21,7 +21,28 @@ class TenancyProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        $this->configureRequest();
         $this->configureQueue();
+    }
+
+    /**
+     * Configure the request to use the current tenant.
+     */
+    protected function configureRequest(): void
+    {
+        if ($this->app->runningInConsole()) {
+            return;
+        }
+
+        $slug = explode('.', $this->app['request']->getHost())[0];
+
+        $tenant = Tenant::allCached()->where('slug', $slug)->first();
+
+        if (! $tenant) {
+            abort(404);
+        }
+
+        $tenant->configure()->use();
     }
 
     /**

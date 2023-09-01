@@ -11,10 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tenant_user', function (Blueprint $table) {
+        Schema::create('user_settings', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('tenant_id')->constrained();
-            $table->foreignId('user_id')->constrained();
+            $table->foreignId('user_id')->constrained('users');
             $table->timestamps();
         });
     }
@@ -24,11 +23,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('tenant_user', function (Blueprint $table) {
-            $table->dropConstrainedForeignId('tenant_id');
+        Schema::table('user_settings', function (Blueprint $table) {
             $table->dropConstrainedForeignId('user_id');
         });
 
-        Schema::dropIfExists('tenant_user');
+        Schema::dropIfExists('user_settings');
     }
 };

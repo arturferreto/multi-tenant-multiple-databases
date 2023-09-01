@@ -14,13 +14,14 @@ class ProfileTest extends TestCase
     public function test_profile_page_is_displayed(): void
     {
         $tenant = Tenant::factory()->create();
-        $user = User::factory()->create(['current_tenant_id' => $tenant->id]);
-        $user->setting()->create(['fav_tenant_id' => $tenant->id]);
-        $user->tenants()->attach($tenant->id);
+        $tenant->use();
+
+        $user = User::factory()->create();
+        $user->setting()->create();
 
         $response = $this
             ->actingAs($user)
-            ->get('/'. $user->currentTenant->slug . '/profile');
+            ->get('/profile');
 
         $response->assertOk();
     }
@@ -28,13 +29,14 @@ class ProfileTest extends TestCase
     public function test_profile_information_can_be_updated(): void
     {
         $tenant = Tenant::factory()->create();
-        $user = User::factory()->create(['current_tenant_id' => $tenant->id]);
-        $user->setting()->create(['fav_tenant_id' => $tenant->id]);
-        $user->tenants()->attach($tenant->id);
+        $tenant->use();
+
+        $user = User::factory()->create();
+        $user->setting()->create();
 
         $response = $this
             ->actingAs($user)
-            ->patch('/'. $user->currentTenant->slug . '/profile', [
+            ->patch('/profile', [
                 'name' => 'Test User',
                 'username' => 'test.user',
                 'email' => 'test@example.com',
@@ -42,7 +44,7 @@ class ProfileTest extends TestCase
 
         $response
             ->assertSessionHasNoErrors()
-            ->assertRedirect('/'. $user->currentTenant->slug . '/profile');
+            ->assertRedirect('/profile');
 
         $user->refresh();
 
@@ -55,20 +57,21 @@ class ProfileTest extends TestCase
     public function test_email_verification_status_is_unchanged_when_the_email_address_is_unchanged(): void
     {
         $tenant = Tenant::factory()->create();
-        $user = User::factory()->create(['current_tenant_id' => $tenant->id]);
-        $user->setting()->create(['fav_tenant_id' => $tenant->id]);
-        $user->tenants()->attach($tenant->id);
+        $tenant->use();
+
+        $user = User::factory()->create();
+        $user->setting()->create();
 
         $response = $this
             ->actingAs($user)
-            ->patch('/'. $user->currentTenant->slug . '/profile', [
+            ->patch('/profile', [
                 'name' => 'Test User',
                 'email' => $user->email,
             ]);
 
         $response
             ->assertSessionHasNoErrors()
-            ->assertRedirect('/'. $user->currentTenant->slug . '/profile');
+            ->assertRedirect('/profile');
 
         $this->assertNotNull($user->refresh()->email_verified_at);
     }
@@ -76,13 +79,14 @@ class ProfileTest extends TestCase
     public function test_user_can_delete_their_account(): void
     {
         $tenant = Tenant::factory()->create();
-        $user = User::factory()->create(['current_tenant_id' => $tenant->id]);
-        $user->setting()->create(['fav_tenant_id' => $tenant->id]);
-        $user->tenants()->attach($tenant->id);
+        $tenant->use();
+
+        $user = User::factory()->create();
+        $user->setting()->create();
 
         $response = $this
             ->actingAs($user)
-            ->delete('/'. $user->currentTenant->slug . '/profile', [
+            ->delete('/profile', [
                 'password' => 'password',
             ]);
 
@@ -97,20 +101,21 @@ class ProfileTest extends TestCase
     public function test_correct_password_must_be_provided_to_delete_account(): void
     {
         $tenant = Tenant::factory()->create();
-        $user = User::factory()->create(['current_tenant_id' => $tenant->id]);
-        $user->setting()->create(['fav_tenant_id' => $tenant->id]);
-        $user->tenants()->attach($tenant->id);
+        $tenant->use();
+
+        $user = User::factory()->create();
+        $user->setting()->create();
 
         $response = $this
             ->actingAs($user)
-            ->from('/'. $user->currentTenant->slug . '/profile')
-            ->delete('/'. $user->currentTenant->slug . '/profile', [
+            ->from('/profile')
+            ->delete('/profile', [
                 'password' => 'wrong-password',
             ]);
 
         $response
             ->assertSessionHasErrors('password')
-            ->assertRedirect('/'. $user->currentTenant->slug . '/profile');
+            ->assertRedirect('/profile');
 
         $this->assertNotNull($user->fresh());
     }
