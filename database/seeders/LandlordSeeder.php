@@ -24,8 +24,8 @@ class LandlordSeeder extends Seeder
             'total_users' => 10,
         ])->createDatabase();
 
-        foreach (Tenant::factory(10)->create() as $tenant) {
-            $tenant->createDatabase();
-        }
+//        foreach (Tenant::factory(10)->create() as $tenant) {
+//            $tenant->createDatabase();
+//        }
     }
 }
