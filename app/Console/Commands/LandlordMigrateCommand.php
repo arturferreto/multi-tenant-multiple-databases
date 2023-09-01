@@ -27,7 +27,7 @@ class LandlordMigrateCommand extends Command
      */
     public function handle(): void
     {
-        $this->confirmRunningInProduction();
+        $this->confirmToProceed();
 
         $this->info('Migrating Landlord Connection');
 
@@ -49,7 +49,7 @@ class LandlordMigrateCommand extends Command
     /**
      * Confirm running in production environment.
      */
-    protected function confirmRunningInProduction(): void
+    protected function confirmToProceed(): void
     {
         if (app()->environment('production') && (! $this->confirm('Do you really wish to run this command in production?'))) {
             $this->info('Command aborted!');

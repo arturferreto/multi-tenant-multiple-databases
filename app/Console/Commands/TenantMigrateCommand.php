@@ -29,7 +29,7 @@ class TenantMigrateCommand extends Command
      */
     public function handle(): void
     {
-        $this->confirmRunningInProduction();
+        $this->confirmToProceed();
 
         $tenants = $this->argument('tenant')
             ? Tenant::query()->whereIn('id', $this->argument('tenant'))->get()
@@ -71,7 +71,7 @@ class TenantMigrateCommand extends Command
     /**
      * Confirm running in production environment.
      */
-    protected function confirmRunningInProduction(): void
+    protected function confirmToProceed(): void
     {
         if (app()->environment('production') && (! $this->confirm('Do you really wish to run this command in production?'))) {
             $this->info('Command aborted!');
