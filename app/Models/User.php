@@ -16,13 +16,6 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable;
 
     /**
-     * The connection name for the model.
-     *
-     * @var string
-     */
-    protected $connection = 'landlord';
-
-    /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
@@ -55,39 +48,10 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the current tenant associated with the user.
-     */
-    public function currentTenant(): BelongsTo
-    {
-        return $this->belongsTo(Tenant::class, 'current_tenant_id')->withTrashed();
-    }
-
-    /**
-     * The tenants that belong to the user.
-     */
-    public function tenants(): BelongsToMany
-    {
-        return $this->belongsToMany(Tenant::class);
-    }
-
-    /**
      * Get the user's setting.
      */
     public function setting(): HasOne
     {
         return $this->HasOne(UserSetting::class);
     }
-
-    /**
-     * Update the user's current tenant.
-     */
-    public function updateCurrentTenant(?int $id = null): void
-    {
-        $this->current_tenant_id = $id;
-        $this->save();
-
-        // This is required to ensure the relationship is updated when the user is retrieved again.
-        $this->refresh();
-    }
-
 }

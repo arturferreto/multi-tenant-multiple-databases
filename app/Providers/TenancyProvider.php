@@ -36,7 +36,7 @@ class TenancyProvider extends ServiceProvider
 
         $slug = explode('.', $this->app['request']->getHost())[0];
 
-        $tenant = Tenant::whereSlug($slug)->first();
+        $tenant = Tenant::allCached()->where('slug', $slug)->first();
 
         if (! $tenant) {
             abort(404);
